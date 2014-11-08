@@ -8,7 +8,7 @@
 //
 // l2met <-> statsd mappings
 // -------------------------
-// measure# ???
+// measure# Absolute?
 // sample#  Gauge
 // count#   Increment
 //
@@ -47,7 +47,7 @@ func (mm *Measurements) HandleLogfmt(key, val []byte) error {
     var prefix []byte
     switch {
     case bytes.HasPrefix(key, measurePrefix):
-        type_ = "measurement"
+        type_ = "measure"
         prefix = measurePrefix
     case bytes.HasPrefix(key, samplePrefix):
         type_ = "sample"
@@ -121,7 +121,7 @@ func main() {
             // statsd go
             switch m.Type {
                 case "measure":
-                    // TODO
+                    stats.Absolute(m.Key, int64(m.Val))
                 case "sample":
                     stats.Gauge(m.Key, int64(m.Val))
                 case "count":
